@@ -25,7 +25,7 @@ namespace ConsoleApp1
         public static string ICDLine()
         {
             string[] list = input.Split(' ');
-            if (list[0] == "cd")
+            if (list[0] == "s")
             {
                 input = "";
                 return list[1];
