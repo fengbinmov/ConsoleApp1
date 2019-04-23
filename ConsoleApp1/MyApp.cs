@@ -43,7 +43,7 @@ namespace ConsoleApp1
 
             while (ISRUN)
             {
-                Input.input = Console.ReadLine();
+                Input.text = Console.ReadLine();
             }
             myIntnet.enable = false;
             

@@ -8,62 +8,123 @@ namespace ConsoleApp1
 {
     public class Input
     {
-        Thread thread = null;
+        public static string text = null;
 
-        public static string input = "";
+        private static List<string> commStr = new List<string> { "cd", "s", "t" };
+        private static string commandText = null;
+        public static string ComText { get { string t = commandText; commandText = null; return t; } }
 
-        public static bool IsText(string ms)
+        public static bool Equals(string ms)
         {
 
-            if (ms == input)
+            if (text == ms)
             {
-                input = "";
+                text = null;
                 return true;
             }
             return false;
         }
-        public static string ICDLine()
+
+        public static string InputText
         {
-            string[] list = input.Split(' ');
-            if (list[0] == "s")
+            get
             {
-                input = "";
-                return list[1];
+                return text;
             }
-            return "";
         }
 
-        public static string IDownLine()
+        public static bool GetCommand(string comm)
         {
-            string[] list = input.Split(' ');
-            if (list[0] == "down")
+
+            if (text == null) return false;
+
+            string[] comms = text.Split(new char[] { ' ' }, 2);
+            if (comms.Length == 1 || !commStr.Contains(comms[0]))
             {
-                input = "";
-                string temp = "";
-                for (int i = 1; i < list.Length; i++)
+                commandText = null;
+                return false;
+            }
+
+            bool isGet = false;
+            if (comms[0] == comm)
+                switch (comms[0])
                 {
-                    if (i == list.Length - 1)
-                        temp += list[i];
-                    else
-                        temp += list[i] + " ";
+                    case "cd":
+                        commandText = GetRealyComm(comms[1]);
+                        isGet = true;
+                        break;
+                    case "s":
+                        commandText = comms[1];
+                        isGet = true;
+                        break;
+                    case "t":
+                        commandText = comms[1];
+                        isGet = true;
+                        break;
+                    default:
+                        break;
                 }
-                return temp;
-            }
-            return "";
+            if (isGet) text = "";
+            return isGet;
         }
-        public void InputEventStart()
+        static string GetRealyComm(string msss)
         {
 
-            thread = new Thread(InputEvent);
-            thread.Start();
-        }
-        public void InputEvent()
-        {
-            while (MyApp.ISRUN)
+            string[] ms = msss.Split('/');
+            List<string> comm = new List<string>();
+            List<string> commFins = new List<string>();
+            List<int> delete = new List<int>();
+
+            for (int i = 0; i < ms.Length; i++)
             {
-
-                input = Console.ReadLine();
+                comm.Add(ms[i]);
             }
+            string listT = "";
+
+            for (int i = 0; i < comm.Count; i++)
+            {
+                if (comm[i] == "..")
+                {
+                    if (!delete.Contains(i))
+                        delete.Add(i);
+
+                    for (int j = i - 1; j >= 0; j--)
+                    {
+                        if (comm[j] != ".." && !delete.Contains(j))
+                        {
+                            delete.Add(j);
+                            break;
+                        }
+                    }
+                }
+                else if (comm[i] == "")
+                {
+                    if (!delete.Contains(i))
+                        delete.Add(i);
+                }
+            }
+            for (int i = 0; i < comm.Count; i++)
+            {
+                bool havadd = true;
+                for (int k = 0; k < delete.Count; k++)
+                {
+                    if (i == delete[k])
+                    {
+                        havadd = false;
+                        break;
+                    }
+                }
+                if (havadd)
+                {
+                    commFins.Add(comm[i]);
+                }
+            }
+            for (int i = 0; i < commFins.Count; i++)
+            {
+                listT += "/" + commFins[i];
+            }
+
+            return listT;
         }
     }
 }

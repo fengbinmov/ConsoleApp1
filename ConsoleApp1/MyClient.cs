@@ -32,34 +32,34 @@ namespace ConsoleApp1
 
         public override void Update()
         {
-            if (Input.IsText("123"))
+            if (Input.Equals("123"))
             {
                 Console.WriteLine("6666666666666");
             }
-            if (Input.IsText("q"))
+            if (Input.Equals("q"))
             {
                 peer.DisConnect();
                 MyApp.ISRUN = false;
 
-                Console.ReadKey();
+                System.Threading.Thread.Sleep(1000);
             }
-            if (Input.IsText("close client"))
+            if (Input.Equals("close client"))
             {
                 peer.DisConnect();
             }
-            if (Input.IsText("connect server"))
+            if (Input.Equals("connect server"))
             {
                 if (!peer.SocketClient.Connected)
                 {
                     peer.Connect();
                 }
             }
-            if (Input.IsText("file"))
+            if (Input.Equals("file"))
             {
                 FileStream file = new FileStream("G:/B02_BOOK/Z_01_成长/代码整洁之道.pdf", FileMode.Open);
                 int fileLenght = (int)file.Length;
 
-                peer.SendRequest(new OperationRequest(2, "代码整洁之道.pdf|"+ fileLenght));
+                peer.SendRequest(new OperationRequest(2, "代码整洁之道.pdf|"+ fileLenght,SendType.File));
 
                 byte[] sendData = new byte[1024];
                 int curIndex = 0;
@@ -76,7 +76,7 @@ namespace ConsoleApp1
 
                 //peer.SendRequest(new OperationRequest(1, ms));
             }
-            if (Input.IsText("S"))
+            if (Input.Equals("S"))
             {
                 #region S
                 string S = "" +
@@ -114,13 +114,12 @@ namespace ConsoleApp1
 
                 peer.SendRequest(new OperationRequest(1, S));
             }
-
-            string ms = Input.ICDLine();
-            if (ms != "")
+            
+            if (Input.GetCommand("s"))
             {
-                peer.SendRequest(new OperationRequest(1, ms));
+                peer.SendRequest(new OperationRequest(1, Input.ComText));
             }
-            if (Input.IsText("status"))
+            if (Input.Equals("status"))
             {
                 Console.WriteLine("peerSocket," + peer.SocketClient);
                 if (peer.SocketClient != null && peer.SocketClient.Connected)
