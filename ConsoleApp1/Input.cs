@@ -10,7 +10,7 @@ namespace ConsoleApp1
     {
         public static string text = null;
 
-        private static List<string> commStr = new List<string> { "cd", "s", "t" };
+        private static List<string> commStr = new List<string> { "cd", "s", "t","code", "room", "sendRoomS", "sendRoomF" };
         private static string commandText = null;
         public static string ComText { get { string t = commandText; commandText = null; return t; } }
 
@@ -58,6 +58,22 @@ namespace ConsoleApp1
                         isGet = true;
                         break;
                     case "t":
+                        commandText = comms[1];
+                        isGet = true;
+                        break;
+                    case "code":
+                        commandText = comms[1];
+                        isGet = true;
+                        break;
+                    case "room":
+                        commandText = comms[1];
+                        isGet = true;
+                        break; 
+                    case "sendRoomS":
+                        commandText = comms[1];
+                        isGet = true;
+                        break;
+                    case "sendRoomF":
                         commandText = comms[1];
                         isGet = true;
                         break;
